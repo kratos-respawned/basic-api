@@ -4,4 +4,5 @@ const productTable = new mongoose.Schema({
   brand: String,
   price: String,
 });
-export default productTable;
+const Collection = mongoose.model("data", productTable);
+export default Collection;
