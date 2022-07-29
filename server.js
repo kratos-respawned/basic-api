@@ -3,11 +3,12 @@ import express from "express";
 import "./config.js";
 import product from "./product.js";
 import multer from "multer";
-
+import cors from "cors";
 const port = process.env.PORT || 3000;
 const app = express();
 //middleware
 app.use(express.json());
+app.use(cors());
 //routes
 app.post("/create", async (req, resp) => {
   let data = new product(req.body);
