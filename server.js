@@ -10,6 +10,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 //routes
+app.get("/", (req, resp) => {
+  resp.send("readme coming soon");
+});
 app.post("/create", async (req, resp) => {
   let data = new product(req.body);
   let result = await data.save();
