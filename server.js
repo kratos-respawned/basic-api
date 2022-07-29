@@ -18,18 +18,22 @@ app.get("/list", async (req, resp) => {
   let data = await product.find({});
   resp.status(200).send(data);
 });
-app.get("/find/:name/:brand", async (req, resp) => {
+app.get("/find/:name", async (req, resp) => {
   let data = await product.find({
     $or: [
       { name: { $regex: req.params.name } },
-      { brand: { $regex: req.params.brand } },
+      //   { brand: { $regex: req.params.brand } },
     ],
   });
   resp.status(200).send(data);
 });
 app.delete("/delete/:id", async (req, resp) => {
   let data = await product.deleteOne({ _id: req.params.id });
-  resp.status(200).send(data);
+  data.acknowledged
+    ? data.deletedCount
+      ? resp.status(200).send("done")
+      : resp.status(200).send("does not exists or already done")
+    : resp.status(200).send("failed");
 });
 app.put("/update/:id", async (req, resp) => {
   let data = await product.updateOne(
@@ -40,7 +44,11 @@ app.put("/update/:id", async (req, resp) => {
       $set: req.body,
     }
   );
-  resp.status(500).send(data);
+  data.acknowledged
+    ? data.modifiedCount
+      ? resp.status(200).send("done")
+      : resp.status(200).send("does not exists or already done")
+    : resp.status(200).send("failed");
 });
 const upload = multer({
   storage: multer.diskStorage({
