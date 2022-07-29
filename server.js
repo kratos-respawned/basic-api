@@ -15,8 +15,13 @@ app.get("/list", async (req, resp) => {
   let data = await product.find({});
   resp.status(200).send(data);
 });
-app.get("/find/:name", async (req, resp) => {
-  let data = await product.find({ name: req.params.name });
+app.get("/find/:name/:brand", async (req, resp) => {
+  let data = await product.find({
+    $or: [
+      { name: { $regex: req.params.name } },
+      { brand: { $regex: req.params.brand } },
+    ],
+  });
   resp.status(200).send(data);
 });
 app.delete("/delete/:id", async (req, resp) => {
@@ -34,6 +39,7 @@ app.put("/update/:id", async (req, resp) => {
   );
   resp.status(500).send(data);
 });
+
 app.listen(3000, () => {
   console.log("server is running at port :: 3000");
 });
