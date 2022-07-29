@@ -3,6 +3,7 @@ import express from "express";
 import "./config.js";
 import product from "./product.js";
 import multer from "multer";
+
 const port = process.env.PORT || 3000;
 const app = express();
 //middleware
