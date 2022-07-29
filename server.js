@@ -2,6 +2,8 @@
 import express from "express";
 import "./config.js";
 import product from "./product.js";
+import multer from "multer";
+const port = process.env.PORT || 3000;
 const app = express();
 //middleware
 app.use(express.json());
@@ -39,7 +41,20 @@ app.put("/update/:id", async (req, resp) => {
   );
   resp.status(500).send(data);
 });
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, callback) => {
+      callback(null, "uploads");
+    },
+    filename: (req, file, callback) => {
+      callback(null, file.fieldname + "-" + Date.now() + ".jpg");
+    },
+  }),
+}).single("user_file");
 
-app.listen(3000, () => {
-  console.log("server is running at port :: 3000");
+app.post("/upload", upload, (req, resp) => {
+  resp.status(200).send("file uploaded");
+});
+app.listen(port, () => {
+  console.log(`server is running at port :: %d`, port);
 });
