@@ -8,7 +8,9 @@ const port = process.env.PORT || 3000;
 const app = express();
 //middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin:'*'
+}));
 //routes
 app.get("/", (req, resp) => {
   resp.send("readme coming soon");
